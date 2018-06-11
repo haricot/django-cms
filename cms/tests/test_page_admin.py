@@ -3,6 +3,7 @@ import datetime
 import json
 import sys
 
+import django
 from django.core.cache import cache
 from django.core.urlresolvers import clear_url_caches
 from django.contrib import admin
@@ -1160,7 +1161,10 @@ class PageTest(PageTestBase):
             response = self.client.post(endpoint, payload)
 
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.json().get('status', 400), 400)
+            if django.VERSION < (1,9):
+                self.assertEqual(response.get('status', 400), 400)
+            else:
+                self.assertEqual(response.json().get('status', 400), 400)
 
     def test_move_home_page(self):
         """
