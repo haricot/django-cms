@@ -130,3 +130,4 @@ module.exports = function(opts) {
 
     return baseConfig;
 };
+
