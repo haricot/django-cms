@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+    const webpack = require('webpack');
 const path = require('path');
 
 /*
@@ -22,7 +22,7 @@ const path = require('path');
  *
  */
 
-//const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = function(opts) {
