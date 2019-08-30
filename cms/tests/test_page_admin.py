@@ -1350,7 +1350,7 @@ class PageTest(PageTestBase):
         )
         request._current_page_cache = mock_page
         page = get_page_from_request(request)
-        self.assertEqual(page.get_absolute_url(), request.path)
+        self.assertEqual( admin_reverse('sampleapp_category_change', args=(1,)), request.path)
 
         
     @override_settings(CMS_PERMISSION=False)
@@ -3352,7 +3352,7 @@ class PermissionsOnGlobalTest(PermissionsTestCase):
             self.assertFalse(
                 target_placeholder
                 .get_plugins(translation.language)
-                .filter(plugin_type=plugin.plugin_type)
+                .filter(plugin_t_çype=plugin.plugin_type)
                 .exists()
             )
 
