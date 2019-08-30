@@ -401,7 +401,7 @@ class BaseCMSTestCase(object):
         request = request or self.get_request()
         return StructureRenderer(request)
 
-    def get_request(self, path=None, language=None, post_data=None, enforce_csrf_checks=False, page=None):
+    def get_request(self, path=None, language=None, post_data=None, enforce_csrf_checks=False, page=None, script_name=None):
         factory = RequestFactory()
 
         if not path:
@@ -421,6 +421,8 @@ class BaseCMSTestCase(object):
         request.user = getattr(self, 'user', AnonymousUser())
         request.LANGUAGE_CODE = language
         request._dont_enforce_csrf_checks = not enforce_csrf_checks
+        if script_name:
+            request.environ['SCRIPT_NAME'] = '/SUB_PATH_TEST/
         if page:
             request.current_page = page
         else:
