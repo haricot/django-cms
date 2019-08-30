@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import mock
+from io import BytesIO
 
 from django.contrib.admin.models import CHANGE, LogEntry
 from django.contrib.auth import get_user_model
