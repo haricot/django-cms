@@ -412,17 +412,23 @@ class BaseCMSTestCase(object):
                 language = settings.LANGUAGES[0][0]
             else:
                 language = settings.LANGUAGE_CODE
-
+        
         if post_data:
             request = factory.post(path, post_data)
         else:
             request = factory.get(path)
+        if script_name:
+            request = WSGIRequest({
+            'PATH_INFO': '/somepath/',
+            'SCRIPT_NAME': '/PREFIX',
+            'REQUEST_METHOD': 'get',
+            'wsgi.input': BytesIO(b''),
+             })
         request.session = self.client.session
         request.user = getattr(self, 'user', AnonymousUser())
         request.LANGUAGE_CODE = language
         request._dont_enforce_csrf_checks = not enforce_csrf_checks
-        if script_name:
-            request.environ['SCRIPT_NAME'] = '/SCRIPT_URL/'
+
         if page:
             request.current_page = page
         else:
