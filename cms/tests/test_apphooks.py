@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import mock
-import os
 
 from django.contrib.admin.models import CHANGE, LogEntry
 from django.contrib.auth import get_user_model
@@ -1089,14 +1088,15 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         request = self.get_request(path, page=child_child_page, script_name=True)
         request.LANGUAGE_CODE = 'en'
   
-        self.assertEqual( request.current_page.get_absolute_url() , 'path' )
+        self.assertEqual( request.current_page.get_absolute_url() , request.path )
 
         fake_context = {'request': request}
         tag = DumbPageLanguageUrl()
  
         output = tag.get_context(fake_context, 'en')
         url = output['content']
-
+        
+        
         self.assertEqual(url,'/en/child_page/child_child_page/extra_1/')
         output = tag.get_context(fake_context, 'de')
         url = output['content']
