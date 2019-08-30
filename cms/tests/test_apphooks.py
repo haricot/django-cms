@@ -1060,4 +1060,4 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         self.apphook_clear()
 
     def test_page_language_url_for_apphook_under_script_name(self, script_name=True):
-        test_page_language_url_for_apphook()
+        self.test_page_language_url_for_apphook()
