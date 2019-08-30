@@ -1060,4 +1060,50 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         self.apphook_clear()
 
     def test_page_language_url_for_apphook_under_script_name(self, script_name=True):
-        self.test_page_language_url_for_apphook()
+
+        self.apphook_clear()
+        superuser = get_user_model().objects.create_superuser('admin', 'admin@admin.com', 'admin')
+        page = self.create_homepage("home", "nav_playground.html", "en", created_by=superuser)
+        create_title('de', page.get_title(), page)
+        page.publish('en')
+        page.publish('de')
+
+        child_page = create_page("child_page", "nav_playground.html", "en",
+                                 created_by=superuser, parent=page)
+        create_title('de', child_page.get_title(), child_page)
+        child_page.publish('en')
+        child_page.publish('de')
+
+        child_child_page = create_page("child_child_page", "nav_playground.html",
+                                       "en", created_by=superuser, parent=child_page, apphook='SampleApp')
+        create_title("de", '%s_de' % child_child_page.get_title(), child_child_page)
+        child_child_page.publish('en')
+        child_child_page.publish('de')
+
+        # publisher_public is set to draft on publish, issue with one to one reverse
+        child_child_page = self.reload(child_child_page)
+        with force_language("en"):
+            path = reverse('extra_first')
+
+        request = self.get_request(path)
+        request.LANGUAGE_CODE = 'en'
+        request.current_page = child_child_page
+
+        fake_context = {'request': request}
+        tag = DumbPageLanguageUrl()
+
+        output = tag.get_context(fake_context, 'en')
+        url = output['content']
+
+        self.assertEqual(url, request.environ['SCRIPT_NAME']+/en/child_page/child_child_page/extra_1/')
+
+        output = tag.get_context(fake_context, 'de')
+        url = output['content']
+        # look the extra "_de"
+        self.assertEqual(url, request.environ['SCRIPT_NAME']+'/de/child_page/child_child_page_de/extra_1/')
+
+        output = tag.get_context(fake_context, 'fr')
+        url = output['content']
+        self.assertEqual(url, request.environ['SCRIPT_NAME']+'/en/child_page/child_child_page/extra_1/')
+
+        self.apphook_clear()
