@@ -421,7 +421,7 @@ class BaseCMSTestCase(object):
             request = factory.get(path)
         if script_name:
             request = WSGIRequest({
-            'PATH_INFO': '/somepath/',
+            'PATH_INFO': path,
             'SCRIPT_NAME': '/PREFIX',
             'REQUEST_METHOD': 'get',
             'wsgi.input': BytesIO(b''),
