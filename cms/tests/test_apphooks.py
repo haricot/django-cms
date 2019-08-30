@@ -15,6 +15,7 @@ from django.utils import six
 from django.utils.timezone import now
 from django.utils.translation import override as force_language
 
+from cms.appresolver import applications_page_check
 from cms.admin.forms import AdvancedSettingsForm
 from cms.api import create_page, create_title
 from cms.app_base import CMSApp
