@@ -1368,7 +1368,7 @@ class PageTest(PageTestBase):
             page_data = {
                 'overwrite_url': '/new-url/',
                 'template': cms_page.template,
-            }assertEqual
+            }
             response = self.client.post(endpoint, page_data)
             self.assertRedirects(response, changelist)
 
