@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import mock
-from io import BytesIO
 
 from django.contrib.admin.models import CHANGE, LogEntry
 from django.contrib.auth import get_user_model
@@ -10,7 +9,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.core import checks
 from django.core.cache import cache
-from django.core.handlers.wsgi import WSGIRequest
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, clear_url_caches, resolve, reverse
 from django.utils import six
@@ -33,7 +31,7 @@ from cms.utils.conf import get_cms_setting
 from cms.utils.urlutils import admin_reverse
 from menus.menu_pool import menu_pool
 from menus.utils import DefaultLanguageChanger
-
+from cms.utils.page import get_page_form_request
 
 APP_NAME = 'SampleApp'
 NS_APP_NAME = 'NamespacedApp'
@@ -1089,8 +1087,10 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
 
         request = self.get_request(path, page=child_child_page, script_name=True)
         request.LANGUAGE_CODE = 'en'
-  
-        self.assertEqual( request.current_page.get_absolute_url() , request.path )
+        
+        page=get_page_from_request(request)
+        
+        self.assertEqual( page.get_absolute_url() , request.path )
 
         fake_context = {'request': request}
         tag = DumbPageLanguageUrl()
