@@ -1343,6 +1343,16 @@ class PageTest(PageTestBase):
         page = get_page_from_request(request)
         self.assertEqual(page, mock_page)
 
+    def test_get_page_from_request_cached_wsgi_test(self):
+        mock_page = 'hello world'
+        request = self.get_request(
+            admin_reverse('sampleapp_category_change', args=(1,) , script_name=True)
+        )
+        request._current_page_cache = mock_page
+        page = get_page_from_request(request)
+        self.assertEqual(page.get_absolute_url(), admin_reverse('sampleapp_category_change', args=(1,))
+
+        
     @override_settings(CMS_PERMISSION=False)
     def test_set_overwrite_url(self):
         superuser = self.get_superuser()
