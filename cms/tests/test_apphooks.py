@@ -1091,19 +1091,25 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
 
         fake_context = {'request': request}
         tag = DumbPageLanguageUrl()
-
+        PurePosixPath('/etc').joinpath('passwd')
+        request = WSGIRequest({
+            'PATH_INFO': 'bogus',
+            'REQUEST_METHOD': 'bogus',
+            'CONTENT_TYPE': 'text/html; charset=utf8',
+            'wsgi.input': BytesIO(b''),
+        })
+        
         output = tag.get_context(fake_context, 'en')
         url = output['content']
 
-        self.assertEqual(url, request.environ['SCRIPT_NAME']+'/en/child_page/child_child_page/extra_1/')
-
+        self.assertEqual(url, os.path.normpath(request.environ['SCRIPT_NAME'], '/en/child_page/child_child_page/extra_1/'))
         output = tag.get_context(fake_context, 'de')
         url = output['content']
         # look the extra "_de"
-        self.assertEqual(url, request.environ['SCRIPT_NAME']+'/de/child_page/child_child_page_de/extra_1/')
+        self.assertEqual(url, os.path.normpath(request.environ['SCRIPT_NAME']+'/de/child_page/child_child_page_de/extra_1/'))
 
         output = tag.get_context(fake_context, 'fr')
         url = output['content']
-        self.assertEqual(url, request.environ['SCRIPT_NAME']+'/en/child_page/child_child_page/extra_1/')
+        self.assertEqual(url, os.path.normpath(request.environ['SCRIPT_NAME']+'/en/child_page/child_child_page/extra_1/'))
 
         self.apphook_clear()
