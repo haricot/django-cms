@@ -1087,8 +1087,9 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
 
         request = self.get_request(path,script_name=True)
         request.LANGUAGE_CODE = 'en'
-        request._current_page_cache = child_child_page
+        #request.current_page= child_child_page
         
+        request._current_page_cache = applications_page_check()
         page=get_page_from_request(request)
         
         self.assertEqual( page.get_absolute_url() , request.path )
