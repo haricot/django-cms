@@ -1085,7 +1085,7 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         with force_language("en"):
             path = reverse('extra_first')
 
-        request = self.get_request(path)
+        request = self.get_request(path, script_name=True)
         request.LANGUAGE_CODE = 'en'
         request.current_page = child_child_page
 
