@@ -1086,9 +1086,10 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         with force_language("en"):
             path = reverse('extra_first')
 
-        request = self.get_request(path, script_name=True)
+        request = self.get_request(path, page=child_child_page, script_name=True)
         request.LANGUAGE_CODE = 'en'
-        request.current_page = child_child_page
+  
+        self.assertEqual( request.current_page.get_absolute_url() , path )
 
         fake_context = {'request': request}
         tag = DumbPageLanguageUrl()
@@ -1096,14 +1097,14 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         output = tag.get_context(fake_context, 'en')
         url = output['content']
 
-        self.assertEqual(url, os.path.normpath(request.environ['SCRIPT_NAME']+'/en/child_page/child_child_page/extra_1/'))
+        self.assertEqual(url,'/en/child_page/child_child_page/extra_1/'))
         output = tag.get_context(fake_context, 'de')
         url = output['content']
         # look the extra "_de"
-        self.assertEqual(url, os.path.normpath(request.environ['SCRIPT_NAME']+'/de/child_page/child_child_page_de/extra_1/'))
+        self.assertEqual(url,'/de/child_page/child_child_page_de/extra_1/'))
 
         output = tag.get_context(fake_context, 'fr')
         url = output['content']
-        self.assertEqual(url, os.path.normpath(request.environ['SCRIPT_NAME']+'/en/child_page/child_child_page/extra_1/'))
+        self.assertEqual(url,'/en/child_page/child_child_page/extra_1/'))
 
         self.apphook_clear()
