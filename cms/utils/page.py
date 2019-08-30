@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 import re
 
 from django.db.models import Q
+import os
+
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.encoding import force_text
@@ -152,7 +154,8 @@ def get_page_from_request(request, use_path=None, clean_path=None):
 
     draft = use_draft(request)
     preview = 'preview' in request.GET
-    path = request.path_info if use_path is None else use_path
+    path = os.path..normpath(request.environ['SCRIPT_NAME'] + request.path_info) if use_path is None else use_path
+    
 
     if clean_path:
         pages_root = reverse("pages-root")
