@@ -422,7 +422,7 @@ class BaseCMSTestCase(object):
         request.LANGUAGE_CODE = language
         request._dont_enforce_csrf_checks = not enforce_csrf_checks
         if script_name:
-            request.environ['SCRIPT_NAME'] = '/SUB_PATH_TEST/
+            request.environ['SCRIPT_NAME'] = '/SUB_PATH_TEST/'
         if page:
             request.current_page = page
         else:
