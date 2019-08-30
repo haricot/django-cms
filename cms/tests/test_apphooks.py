@@ -31,7 +31,7 @@ from cms.utils.conf import get_cms_setting
 from cms.utils.urlutils import admin_reverse
 from menus.menu_pool import menu_pool
 from menus.utils import DefaultLanguageChanger
-from cms.utils.page import get_page_form_request
+from cms.utils.page import get_page_from_request
 
 APP_NAME = 'SampleApp'
 NS_APP_NAME = 'NamespacedApp'
