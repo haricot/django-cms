@@ -2,6 +2,7 @@
 import json
 import sys
 import warnings
+from io import BytesIO
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -9,6 +10,7 @@ from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.handlers.wsgi import WSGIRequest
 from django.forms.models import model_to_dict
 from django.template import engines
 from django.template.context import Context
