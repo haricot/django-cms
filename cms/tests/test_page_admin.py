@@ -1348,9 +1348,9 @@ class PageTest(PageTestBase):
         request = self.get_request(
             admin_reverse('sampleapp_category_change', args=(1,)) , script_name=True
         )
-        request._current_page_cache = mock_page
+        #request._current_page_cache = mock_page
         page = get_page_from_request(request)
-        self.assertEqual( admin_reverse('sampleapp_category_change', args=(1,)), request.path)
+        self.assertEqual( page, request.path)
 
         
     @override_settings(CMS_PERMISSION=False)
