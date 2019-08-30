@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 from django.core import checks
 from django.core.cache import cache
+from django.core.handlers.wsgi import WSGIRequest
 from django.test.utils import override_settings
 from django.urls import NoReverseMatch, clear_url_caches, resolve, reverse
 from django.utils import six
