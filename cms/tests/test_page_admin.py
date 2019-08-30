@@ -1350,7 +1350,7 @@ class PageTest(PageTestBase):
         )
         request._current_page_cache = mock_page
         page = get_page_from_request(request)
-        self.assertEqual(page.get_absolute_url(), admin_reverse('sampleapp_category_change', args=(1,))
+        self.assertEqual(page.get_absolute_url(), request.path)
 
         
     @override_settings(CMS_PERMISSION=False)
@@ -1368,7 +1368,7 @@ class PageTest(PageTestBase):
             page_data = {
                 'overwrite_url': '/new-url/',
                 'template': cms_page.template,
-            }
+            }assertEqual
             response = self.client.post(endpoint, page_data)
             self.assertRedirects(response, changelist)
 
