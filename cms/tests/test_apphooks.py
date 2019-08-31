@@ -28,6 +28,7 @@ from cms.test_utils.testcases import CMSTestCase
 from cms.tests.test_menu_utils import DumbPageLanguageUrl
 from cms.toolbar.toolbar import CMSToolbar
 from cms.utils.conf import get_cms_setting
+from cms.utils.page import get_page_from_request
 from cms.utils.urlutils import admin_reverse
 from menus.menu_pool import menu_pool
 from menus.utils import DefaultLanguageChanger
@@ -1085,16 +1086,16 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         with force_language("en"):
             path = reverse('extra_first')
 
-        request = self.get_request(path,script_name=True)
+        request = self.get_request(path,script_name)
         
         request.LANGUAGE_CODE = 'en'
         request._current_page_cache = applications_page_check(request)
-        page=get_page_from_request(request)
+        page = get_page_from_request(request)
        
-        self.assertEqual( page.get_absolute_url() , request.path )
+        self.assertEqual(page.get_absolute_url(), request.path)
       
         request.LANGUAGE_CODE = 'de'
         request._current_page_cache = applications_page_check(request)
-        page=get_page_from_request(request)
+        page = get_page_from_request(request)
         
-        self.assertEqual( page.get_absolute_url() , request.path )
+        self.assertEqual(page.get_absolute_url(), request.path)
