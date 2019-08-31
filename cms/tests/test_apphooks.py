@@ -1080,27 +1080,33 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         create_title("de", '%s_de' % child_child_page.get_title(), child_child_page)
         child_child_page.publish('en')
         child_child_page.publish('de')
-
+        
+        #fake subpath
+        page_fake_script_url_prefix = create_page("PREFIX", "nav_playground.html", "en",
+                                 created_by=superuser)    
+        page_fake_script_url_prefix.publish('en')
+        self.copy_page(page, page_fake_script_url_prefix)
+        
         # publisher_public is set to draft on publish, issue with one to one reverse
         child_child_page = self.reload(child_child_page)
+        page_fake_script_url_prefix = self.reload(page_fake_script_url_prefix)
+        
         with force_language("en"):
             path = reverse('extra_first')
 
         #test prefix is added
         request = self.get_request(path,script_name=True)
+        
         self.assertEqual(request.path, '/PREFIX/en/child_page/child_child_page/extra_1/')
     
         request.LANGUAGE_CODE = 'en'
         
-        #request._current_page_cache = applications_page_check(request)
-        from cms.utils.moderator import use_draft
-      
-        request._current_page_cache = applications_page_check(request)
+        # path without define PREFIX in request '/en/child_page/child_child_page/extra_1/'
+        # return with prefix
+        request.path = path
         page = get_page_from_request(request, clean_path=True)
-        
-       # self.assertEqual( path, '/PREFIX/en/child_page/child_child_page/extra_1/')
-        #page was a finded with  '/PREFIX/en/child_page/child_child_page/extra_1/' 
-        self.assertEqual(page.get_absolute_url(), '/en/child_page/child_child_page/extra_1/')
+
+        self.assertEqual(page.get_absolute_url(), '/PREFIX/en/child_page/child_child_page/')
         
         """
         request.LANGUAGE_CODE = 'de'
