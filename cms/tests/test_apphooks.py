@@ -1085,11 +1085,11 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         page_fake_script_url_prefix = create_page("PREFIX", "nav_playground.html", "en",
                                  created_by=superuser)    
         page_fake_script_url_prefix.publish('en')
-        self.copy_page(page, page_fake_script_url_prefix)
-        
+
         # publisher_public is set to draft on publish, issue with one to one reverse
         child_child_page = self.reload(child_child_page)
         page_fake_script_url_prefix = self.reload(page_fake_script_url_prefix)
+        self.copy_page(page, page_fake_script_url_prefix)
         
         with force_language("en"):
             path = reverse('extra_first')
