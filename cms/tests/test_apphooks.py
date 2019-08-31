@@ -1087,7 +1087,7 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
             path = reverse('extra_first')
         #fake path wsgi url environemento     
         path = '/PREFIX' + path
-        request = self.get_request(path,sript_name)
+        request = self.get_request(path,script_name)
         self.assertEqual(request.path, '/PREFIX/en/child_page/child_child_page/extra_1/')
      
         request.LANGUAGE_CODE = 'en'
