@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from io import BytesIO
 import json
 import sys
 import warnings
@@ -9,6 +10,7 @@ from django.contrib.auth.models import AnonymousUser, Permission
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.handlers.wsgi import WSGIRequest
 from django.forms.models import model_to_dict
 from django.template import engines
 from django.template.context import Context
@@ -401,7 +403,7 @@ class BaseCMSTestCase(object):
         request = request or self.get_request()
         return StructureRenderer(request)
 
-    def get_request(self, path=None, language=None, post_data=None, enforce_csrf_checks=False, page=None):
+    def get_request(self, path=None, language=None, post_data=None, enforce_csrf_checks=False, page=None, script_name=None):
         factory = RequestFactory()
 
         if not path:
@@ -417,6 +419,13 @@ class BaseCMSTestCase(object):
             request = factory.post(path, post_data)
         else:
             request = factory.get(path)
+        if script_name:
+            request = WSGIRequest({
+            'PATH_INFO': path,
+            'SCRIPT_NAME': '/PREFIX',
+            'REQUEST_METHOD': 'get',
+            'wsgi.input': BytesIO(b''),
+             })
         request.session = self.client.session
         request.user = getattr(self, 'user', AnonymousUser())
         request.LANGUAGE_CODE = language
