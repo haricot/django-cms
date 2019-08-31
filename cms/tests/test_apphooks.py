@@ -1060,7 +1060,7 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
 
         self.apphook_clear()
 
-    def test_page_language_url_for_apphook_under_script_name(self, script_name=True):
+    def test_page_language_url_for_apphook_under_script_name(self):
 
         self.apphook_clear()
         superuser = get_user_model().objects.create_superuser('admin', 'admin@admin.com', 'admin')
@@ -1087,7 +1087,7 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
             path = reverse('extra_first')
 
         #test prefix is added
-        request = self.get_request(path,script_name)
+        request = self.get_request(path,script_name=True)
         self.assertEqual(request.path, '/PREFIX/en/child_page/child_child_page/extra_1/')
     
         request.LANGUAGE_CODE = 'en'
