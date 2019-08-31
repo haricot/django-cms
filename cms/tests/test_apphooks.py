@@ -1084,13 +1084,10 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         # publisher_public is set to draft on publish, issue with one to one reverse
         child_child_page = self.reload(child_child_page)
         with force_language("en"):
-            #fake wsgi url environemento
-            import os
-     #       path = os.normpath(request.environ['srcipt_name'] , reverse('extra_first'))
             path = reverse('extra_first')
-        
-        path = request.environ['SCRIPT_NAME'] + path
-        request = self.get_request(path,script_name)
+        #fake path wsgi url environemento     
+        path = '/PREFIX' + path
+        request = self.get_request(path,sript_name)
         self.assertEqual(request.path, '/PREFIX/en/child_page/child_child_page/extra_1/')
      
         request.LANGUAGE_CODE = 'en'
