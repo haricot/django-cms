@@ -1103,7 +1103,8 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         # will returned with prefix.
         # And so return None because the prefix has be added with get_page_from_request
         # but get_page_from_request works under wgsi conf with prefix + path.
-        request.path = path
+        request.path = '/en/child_page/child_child_page/'
+        self.assertEqual(  request.path,  request.path_info)  
         page = get_page_from_request(request, clean_path=True)
         self.assertEqual(page, None)
         
