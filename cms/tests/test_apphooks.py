@@ -1081,15 +1081,9 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         child_child_page.publish('en')
         child_child_page.publish('de')
         
-        #fake subpath
-        page_fake_script_url_prefix = create_page("PREFIX", "nav_playground.html", "en",
-                                 created_by=superuser)    
-        page_fake_script_url_prefix.publish('en')
-
         # publisher_public is set to draft on publish, issue with one to one reverse
         child_child_page = self.reload(child_child_page)
-        page_fake_script_url_prefix = self.reload(page_fake_script_url_prefix)
-        self.copy_page(page, page_fake_script_url_prefix)
+        
         
         with force_language("en"):
             path = reverse('extra_first')
@@ -1101,12 +1095,22 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
     
         request.LANGUAGE_CODE = 'en'
         
-        # path without define PREFIX in request '/en/child_page/child_child_page/extra_1/'
-        # return with prefix
+        # With script_name get_page_from_request needs to not work in this test. if it works,
+        # it would mean that it does not take into account the prefix script_name, because under these sub_path conditions,
+        # wsgi will respond correctly with the prefix + path.
+        # it does not have to answer as if it does not take into account the script_name while exiting it.
+        # Monkey positif False: test without define PREFIX in request '/en/child_page/child_child_page/extra_1/'
+        # will returned with prefix.
+        # And so return None because the prefix has be added with get_page_from_request
+        # but get_page_from_request works under wgsi conf with prefix + path.
         request.path = path
         page = get_page_from_request(request, clean_path=True)
-
-        self.assertEqual(page.get_absolute_url(), '/PREFIX/en/child_page/child_child_page/')
+        self.assertEqual(page.get_absolute_url(), None)
+        
+        # test with clean path
+        request._current_page_cache = applications_page_check(request)
+        page = get_page_from_request(request)
+        self.assertEqual(page.get_absolute_url(), '/en/child_page/child_child_page/')
         
         """
         request.LANGUAGE_CODE = 'de'
