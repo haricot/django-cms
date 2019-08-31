@@ -1093,6 +1093,8 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         request.LANGUAGE_CODE = 'en'
         
         #request._current_page_cache = applications_page_check(request)
+        from cms.utils.moderator import use_draft
+        use_draft(request)
         page = get_page_from_request(request)
         
        # self.assertEqual( path, '/PREFIX/en/child_page/child_child_page/extra_1/')
