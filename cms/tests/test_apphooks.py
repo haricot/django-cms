@@ -1091,11 +1091,14 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         request.LANGUAGE_CODE = 'en'
         request._current_page_cache = applications_page_check(request)
         page = get_page_from_request(request)
-       
+        
+        self.assertEqual( path, '/PREFIX/en/child_page/child_child_page/extra_1')
         self.assertEqual(page.get_absolute_url(), '/PREFIX/en/child_page/child_child_page/')
       
         request.LANGUAGE_CODE = 'de'
         request._current_page_cache = applications_page_check(request)
         page = get_page_from_request(request)
+        
+        self.assertEqual( path, '/PREFIX/en/child_page/child_child_page/extra_1')
         
         self.assertEqual(page.get_absolute_url(), '/PREFIX/de/child_page/child_child_page/')
