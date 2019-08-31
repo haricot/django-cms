@@ -1058,3 +1058,43 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         self.assertEqual(url, '/en/child_page/child_child_page/extra_1/')
 
         self.apphook_clear()
+
+    def test_page_language_url_for_apphook_under_script_name(self, script_name=True):
+
+        self.apphook_clear()
+        superuser = get_user_model().objects.create_superuser('admin', 'admin@admin.com', 'admin')
+        page = self.create_homepage("home", "nav_playground.html", "en", created_by=superuser)
+        create_title('de', page.get_title(), page)
+        page.publish('en')
+        page.publish('de')
+
+        child_page = create_page("child_page", "nav_playground.html", "en",
+                                 created_by=superuser, parent=page)
+        create_title('de', child_page.get_title(), child_page)
+        child_page.publish('en')
+        child_page.publish('de')
+
+        child_child_page = create_page("child_child_page", "nav_playground.html",
+                                       "en", created_by=superuser, parent=child_page, apphook='SampleApp')
+        create_title("de", '%s_de' % child_child_page.get_title(), child_child_page)
+        child_child_page.publish('en')
+        child_child_page.publish('de')
+
+        # publisher_public is set to draft on publish, issue with one to one reverse
+        child_child_page = self.reload(child_child_page)
+        with force_language("en"):
+            path = reverse('extra_first')
+
+        request = self.get_request(path,script_name=True)
+        
+        request.LANGUAGE_CODE = 'en'
+        request._current_page_cache = applications_page_check(request)
+        page=get_page_from_request(request)
+       
+        self.assertEqual( page.get_absolute_url() , request.path )
+      
+        request.LANGUAGE_CODE = 'de'
+        request._current_page_cache = applications_page_check(request)
+        page=get_page_from_request(request)
+        
+        self.assertEqual( page.get_absolute_url() , request.path )
