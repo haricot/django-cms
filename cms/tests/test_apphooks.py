@@ -1105,7 +1105,7 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         # but get_page_from_request works under wgsi conf with prefix + path.
         request.path = path
         page = get_page_from_request(request, clean_path=True)
-        self.assertEqual(page.get_absolute_url(), None)
+        self.assertEqual(page, None)
         
         # test with clean path
         request._current_page_cache = applications_page_check(request)
