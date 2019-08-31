@@ -1095,7 +1095,7 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         #request._current_page_cache = applications_page_check(request)
         from cms.utils.moderator import use_draft
         use_draft(request)        
-        request._current_page_cache = applications_page_check(request)
+      #  request._current_page_cache = applications_page_check(request)
         page = get_page_from_request(request, clean_path=True)
         
        # self.assertEqual( path, '/PREFIX/en/child_page/child_child_page/extra_1/')
