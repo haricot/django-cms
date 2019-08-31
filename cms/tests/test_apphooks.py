@@ -1085,11 +1085,11 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         child_child_page = self.reload(child_child_page)
         with force_language("en"):
             path = reverse('extra_first')
-        #fake path wsgi url environemento     
-        path = '/PREFIX' + path
+
+        #test prefix is added
         request = self.get_request(path,script_name)
         self.assertEqual(request.path, '/PREFIX/en/child_page/child_child_page/extra_1/')
-     
+    
         request.LANGUAGE_CODE = 'en'
         
         #request._current_page_cache = applications_page_check(request)
@@ -1099,7 +1099,8 @@ class ApphooksPageLanguageUrlTestCase(CMSTestCase):
         page = get_page_from_request(request, clean_path=True)
         
        # self.assertEqual( path, '/PREFIX/en/child_page/child_child_page/extra_1/')
-        self.assertEqual(page.get_absolute_url(), '/PREFIX/en/child_page/child_child_page/extra_1/')
+        #page was a finded with  '/PREFIX/en/child_page/child_child_page/extra_1/' 
+        self.assertEqual(page.get_absolute_url(), '/en/child_page/child_child_page/extra_1/')
       
         request.LANGUAGE_CODE = 'de'
         request._current_page_cache = applications_page_check(request)
